@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+@keyframes slide {
+  0%, 100% { transform: translateX(0); }
+  33% { transform: translateX(-100%); }
+  66% { transform: translateX(-200%); }
+}
+
+.animate-slide {
+  display: flex;
+  width: 50%;
+  animation: slide 3s ;
+}
