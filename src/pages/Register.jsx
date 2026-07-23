@@ -13,7 +13,7 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         setNameError(""); 
@@ -25,8 +25,6 @@ const Register = () => {
             setNameError("name should be at least 5 character");
             toast.error("Name should be at least 5 characters.");
             return;
-        } else {
-            setNameError("")
         }
         const photoUrl = e.target.photoUrl.value;
         const email = e.target.email.value;
@@ -34,58 +32,52 @@ const Register = () => {
         const confirmpassword = e.target.confirmpassword.value;
 
         if (password.length < 6) {
-             setPasswordError('Password must be at least 6 characters long.');
+            setPasswordError('Password must be at least 6 characters long.');
             toast.error('Password must be at least 6 characters long.');
             return
-        };
+        }
         if (password !== confirmpassword) {
             setPasswordError('Password and confirm password must be the same.');
-             toast.error('Password and confirm password must be the same.');
+            toast.error('Password and confirm password must be the same.');
             return
-        };
+        }
         if (!/[a-z]/.test(password)) {
             setPasswordError("Password must contain at least one lowercase letter.");
-              toast.error("Password must contain at least one lowercase letter.");
+            toast.error("Password must contain at least one lowercase letter.");
             return
-        };
+        }
         if (!/[A-Z]/.test(password)) {
-             setPasswordError("Password must contain at least one uppercase letter.");
+            setPasswordError("Password must contain at least one uppercase letter.");
             toast.error("Password must contain at least one uppercase letter.");
             return
-        };
+        }
         if (!/\d/.test(password)) {
             setPasswordError("Password must contain at least one number.");
-             toast.error("Password must contain at least one number.");
+            toast.error("Password must contain at least one number.");
             return
-        };
+        }
         if (!/[!@#$%^&*]/.test(password)) {
             setPasswordError("Password must contain at least one special character (!@#$%^&*).");
-             toast.error("Password must contain at least one special character (!@#$%^&*).");
+            toast.error("Password must contain at least one special character (!@#$%^&*).");
             return
-        };
+        }
 
-
-        handleRegister(email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-
-                updateProfile(user, {
-                    displayName: fullname,
-                    photoURL: photoUrl,
-                }).then(() => {
-
-                    auth.currentUser.reload().then(() => {
-                        setUser(auth.currentUser);
-                         toast.success("Registration successful and profile updated!");
-                         navigate('/');
-                    });
-                }).catch((error) => {
-                    console.error("Error updating profile: ", error);
-                });
-            })
-            .catch((error) => {
-                console.error("Registration error: ", error);
+        try {
+            const userCredential = await handleRegister(email, password);
+            const user = userCredential.user;
+            await updateProfile(user, {
+                displayName: fullname,
+                photoURL: photoUrl,
             });
+            await auth.currentUser.reload();
+            setUser(auth.currentUser);
+            toast.success("Registration successful and profile updated!");
+            navigate('/');
+        } catch (error) {
+            console.error("Registration error: ", error);
+            setGeneralError(error.message);
+            toast.error(`Registration failed: ${error.message}`);
+        }
 
 
 
@@ -127,8 +119,10 @@ const Register = () => {
 
                         </div>
                         <input type="password" name="confirmpassword" id="confirmpassword" placeholder="*****" required className="w-full px-3 py-2 border rounded-md dark:border-gray-300 dark:bg-gray-50 dark:text-gray-800" />
+                    {passwordError && <p className='text-xs text-red-400'>{passwordError}</p>}
                     </div>
                 </div>
+                {generalError && <p className="text-xs text-red-400 text-center mb-2">{generalError}</p>}
                 <div className="space-y-2">
                     <div>
                         <button type="submit" className="w-full px-8 py-3 font-semibold rounded-md bg-violet-600 text-gray-50">Register</button>

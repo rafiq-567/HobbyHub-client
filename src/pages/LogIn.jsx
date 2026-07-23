@@ -46,7 +46,6 @@ const googleLoginHandler = () => {
     handleGoogleLogin()
         .then((result) => {
             const user = result.user;
-          
             navigate(from ? from : "/");
         })
         .catch((err) => {
