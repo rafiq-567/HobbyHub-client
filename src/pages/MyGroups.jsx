@@ -8,7 +8,7 @@ const MyGroups = () => {
 
     useEffect(() => {
         if (user?.email) {
-            fetch(`https://hobby-hub-server-kohl.vercel.app/hobbies?email=${user.email}`)
+            fetch(`https://hobby-hub-server-kohl.vercel.app/myGroups?email=${user.email}`)
                 .then(res => res.json())
                 .then(data => setMyGroups(data))
                 .catch(err => console.error(err));
@@ -21,6 +21,9 @@ const MyGroups = () => {
 
         fetch(`https://hobby-hub-server-kohl.vercel.app/hobbies/${id}`, {
             method: "DELETE"
+        }).then(res => {
+            if (!res.ok) throw new Error('Delete failed');
+            return res.json();
         })
             .then(res => res.json())
             .then(result => {

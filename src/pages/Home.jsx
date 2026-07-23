@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Cursor, useTypewriter } from 'react-simple-typewriter';
-// Assuming you'll fetch real group data later,
-// for now, let's use dummy data for Featured Groups.
-import { Fade, Slide, Zoom } from 'react-awesome-reveal';
+import { Fade } from 'react-awesome-reveal';
 
 const slides = [
   { id: 1, image: '/slide-11.jpg'},
@@ -72,7 +70,7 @@ const Home = () => {
           >
             {/* Dark overlay for readability of slide title */}
             <div className="w-full h-full bg-black/40 flex items-center justify-center text-white">
-              <p className="text-2xl sm:text-4xl font-bold drop-shadow-md">{slide.title}</p>
+              <p className="text-2xl sm:text-4xl font-bold drop-shadow-md">{slide.title || ''}</p>
             </div>
           </div>
         ))}

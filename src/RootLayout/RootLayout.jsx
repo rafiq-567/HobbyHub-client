@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged,
 import { auth } from '../firebase/firebase.config';
 import Footer from '../components/Footer/Footer';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
-import { ToastContainer } from 'react-toastify'; 
+import { ToastContainer, toast } from 'react-toastify'; 
 
 
 
@@ -47,14 +47,18 @@ const RootLayout = () => {
     };
 
     const handleForgetPassword = (email) => {
-        
-        // sendPasswordResetEmail(auth, email)
-        //     .then(() => {
-        //         // Password reset email sent!
-        //     })
-        //     .catch((error) => {
-        //         console.error("Forget password error:", error);
-        //     });
+        if (!email) {
+            toast.error('Please enter your email first.');
+            return;
+        }
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                toast.success('Password reset email sent!');
+            })
+            .catch((error) => {
+                toast.error(`Failed to send reset email: ${error.message}`);
+                console.error("Forget password error:", error);
+            });
     };
 
     const contextValues = {

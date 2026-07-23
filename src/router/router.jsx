@@ -1,6 +1,5 @@
 import {
   createBrowserRouter,
- 
 } from "react-router";
 import RootLayout from "../RootLayout/RootLayout";
 import Home from "../pages/Home";
@@ -12,6 +11,7 @@ import CreateGroup from "../pages/CreateGroup";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
 import GroupDetails from "../pages/GroupDetails";
 import UpdateGroup from "../pages/UpdateGroup";
+import MyProfile from "../pages/MyProfile";
 
 
 
@@ -50,14 +50,17 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/UpdateGroup/:id",
-                
-                Component: UpdateGroup
+                element: <PrivateRoute><UpdateGroup /></PrivateRoute>
             },
             {
                 path: "/group/:id",
                  element: <PrivateRoute>
                 <GroupDetails></GroupDetails>
             </PrivateRoute>
+            },
+            {
+                path: "/my-profile",
+                element: <PrivateRoute><MyProfile /></PrivateRoute>
             },
     ]
   },

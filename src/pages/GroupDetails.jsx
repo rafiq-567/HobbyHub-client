@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { valueContext } from '../RootLayout/RootLayout';
 
 const GroupDetails = () => {
     
     const { id } = useParams();
     const [group, setGroup] = useState(null);
+    const { user } = useContext(valueContext);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Placeholder for authenticated user info (replace with actual context/redux)
-    const currentUser = { email: 'user@example.com' }; // Replace with dynamic user data
-
     useEffect(() => {
         const fetchGroupDetails = async () => {
             try {
-                // Replace with your actual API endpoint
-                // In GroupDetails.js
                 const response = await axios.get(`https://hobby-hub-server-kohl.vercel.app/hobbies/${id}`);
                 setGroup(response.data);
             } catch (err) {
@@ -44,17 +41,14 @@ const GroupDetails = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // Replace with your actual API endpoint for joining a group
-                    await axios.post(`/api/groups/${id}/join`, {
-                        userEmail: currentUser.email // Send user's email or ID
+                    await axios.post(`https://hobby-hub-server-kohl.vercel.app/hobbies/${id}/join`, {
+                        userEmail: user?.email
                     });
                     Swal.fire(
                         'Joined!',
                         'You have successfully joined the group.',
                         'success'
                     );
-                    // Optionally, refresh group data to show updated member count
-                    // or disable the join button
                 } catch (err) {
                     Swal.fire(
                         'Error!',

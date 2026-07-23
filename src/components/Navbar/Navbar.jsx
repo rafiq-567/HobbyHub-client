@@ -1,15 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router';
 import { valueContext } from '../../RootLayout/RootLayout';
 import userImg from "../../assets/user.png";
 import { Tooltip } from 'react-tooltip';
 
 const Navbar = () => {
-    // const contextValue = useContext(valueContext); 
     const navigate = useNavigate();
     const { pathname } = useLocation();
-
     const { handleLogOut, user } = useContext(valueContext);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
         <header className="p-4 bg-gray-100 text-gray-800">
@@ -64,7 +63,7 @@ const Navbar = () => {
                         </>
                     )}
                 </div>
-                <button onClick={() => navigate("/register")} className="p-4 lg:hidden">
+                <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-4 lg:hidden">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6 dark:text-gray-800">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
